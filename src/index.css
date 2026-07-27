@@ -4,31 +4,24 @@
   /* Typography */
   --font-family: 'Outfit', system-ui, Avenir, Helvetica, Arial, sans-serif;
   
-  /* Colors - Dark Theme Focus */
-  --bg-color: #0f172a; /* Slate 900 */
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  /* Colors - Dashboard Theme */
+  --bg-color: #0b1120; /* Very dark blue/black */
+  --card-bg: #1e2433; /* Dark gray/blue for panels and cards */
+  --card-border: #2e364a;
+  
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
-  --accent-color: #3b82f6;
+  --text-muted: #64748b;
   
-  /* Glassmorphism */
-  --glass-bg: rgba(30, 41, 59, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* Status Colors (Neon) */
+  --status-available-text: #22c55e;
+  --status-available-bg: rgba(34, 197, 94, 0.15);
+  --status-approved-bg: #10b981; /* Solid green for approved */
+  --status-approved-text: #064e3b;
+  --status-locked-text: #94a3b8;
   
-  /* Category Colors (Vibrant Neon/Pastel) */
-  --cat-complementaria: #38bdf8;       /* Light Blue */
-  --cat-aplicada: #4ade80;             /* Green */
-  --cat-electiva: #a3e635;             /* Lime */
-  --cat-basicas: #fbbf24;              /* Amber */
-  --cat-basicas_ingenieria: #c084fc;   /* Purple */
-  --cat-requisito_grado: #f87171;      /* Red */
-  
-  /* Status Colors */
-  --status-approved: #22c55e;
-  --status-blocked: #ef4444;
-  --status-prereq: #3b82f6;
-  --status-coreq: #d946ef;
+  --glow-blue: #3b82f6; /* En curso / hover */
+  --glow-orange: #f59e0b; /* Relacionadas */
 }
 
 * {
@@ -39,7 +32,10 @@
 
 body {
   font-family: var(--font-family);
-  background: var(--bg-gradient);
+  background-color: var(--bg-color);
+  /* Optional: Background pattern to mimic circuit board */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
   background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
@@ -56,28 +52,23 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  background: var(--bg-color);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--card-border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--text-muted);
 }
 
 a {
   font-weight: 500;
-  color: var(--accent-color);
+  color: var(--glow-blue);
   text-decoration: none;
   transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #60a5fa;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -88,3 +79,4 @@ h1, h2, h3, h4, h5, h6 {
 button {
   font-family: var(--font-family);
 }
+

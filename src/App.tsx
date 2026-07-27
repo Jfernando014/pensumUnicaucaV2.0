@@ -201,14 +201,14 @@ function App() {
             .sort((a, b) => a - b)
             .map((semester) => (
               <div key={semester} className="semester-col">
-                <h2
-                  className="semester-title"
-                  onClick={() => toggleSemester(semester)}
-                  title="Clic para seleccionar/deseleccionar todo el semestre"
-                >
-                  Semestre {semester}
-                  <span style={{ fontSize: "0.8em", opacity: 0.5 }}>✓</span>
-                </h2>
+                <div className="semester-header">
+                  <h2 className="semester-title">Semestre {semester}</h2>
+                  <div 
+                    className={`semester-toggle ${semesters[semester].every(s => approvedSubjects[s.code]) ? 'active' : ''}`}
+                    onClick={() => toggleSemester(semester)}
+                    title="Marcar todo el semestre"
+                  />
+                </div>
                 
                 <div className="subjects-list">
                   {semesters[semester].map((subject) => {
@@ -254,8 +254,7 @@ function App() {
       <footer className="app-footer">
         <div className="progress-container">
           <div className="progress-stats">
-            <span>Progreso del pensum</span>
-            <span><strong>{approvedCredits}</strong> / {totalCredits} créditos ({progressPercent}%)</span>
+            Créditos Obtenidos: <strong>{approvedCredits}</strong> / {totalCredits}
           </div>
           <div className="progress-bar-bg">
             <div

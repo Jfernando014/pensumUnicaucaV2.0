@@ -14,29 +14,21 @@ type Props = {
   isCoreq: boolean;
 };
 
-// Mapeo de categorías a variables CSS (definidas en index.css)
-const categoryVariables: Record<string, string> = {
-  complementaria: "var(--cat-complementaria)",       
-  aplicada: "var(--cat-aplicada)",             
-  electiva: "var(--cat-electiva)",               
-  basicas: "var(--cat-basicas)",              
-  basicas_ingenieria: "var(--cat-basicas_ingenieria)",   
-  requisito_grado: "var(--cat-requisito_grado)",       
-};
-
 function SubjectCard({ subject, approved, enabled, reason, onToggle, setHoveredSubject,
                         isPrereq, isUnlockedBy, isCoreq }: Props) {
     const isBlocked = !enabled && !approved;
-    const baseColor = categoryVariables[subject.category];
+    const isHovered = hoveredSubject === subject.code;
     
     // Determinar las clases a aplicar
     const classNames = ["subject-card"];
     if (approved) classNames.push("status-approved");
     if (isBlocked) classNames.push("status-blocked");
     
-    if (isPrereq) classNames.push("highlight-prereq");
-    if (isUnlockedBy) classNames.push("highlight-unlockedBy");
-    if (isCoreq) classNames.push("highlight-coreq");
+    if (isHovered) {
+        classNames.push("highlight-focus");
+    } else if (isPrereq || isUnlockedBy || isCoreq) {
+        classNames.push("highlight-related");
+    }
     
     return (
         <div
@@ -44,21 +36,26 @@ function SubjectCard({ subject, approved, enabled, reason, onToggle, setHoveredS
             onClick={() => enabled && onToggle(subject.code)}
             onMouseEnter={() => setHoveredSubject(subject.code)}
             onMouseLeave={() => setHoveredSubject(null)}
-            style={{ "--card-color": baseColor } as React.CSSProperties}
         >
-            <span className="subject-code">{subject.code}</span>
+            <div className="card-header">
+                <span className="subject-code">{subject.code}</span>
+                {!approved && enabled && !isHovered && (
+                    <span className="badge badge-available">DISPONIBLE</span>
+                )}
+                {!approved && enabled && isHovered && (
+                    <span className="badge badge-encurso">EN CURSO</span>
+                )}
+                {isBlocked && (
+                    reason === "No cumple prerrequisitos" ? (
+                        <span className="badge badge-locked-reason">🔒 NO CUMPLE PRERREQUISITOS</span>
+                    ) : (
+                        <span className="badge badge-locked">🔒</span>
+                    )
+                )}
+            </div>
+            
             <div className="subject-name">{subject.name}</div>
-            <div className="subject-credits">{subject.credits} créditos</div>
-            
-            {!approved && enabled && (
-                <div className="subject-badge badge-available">Disponible</div>
-            )}
-            
-            {isBlocked && (
-                <div className="subject-badge badge-blocked">
-                    🔒 {reason}
-                </div>
-            )}
+            <div className="subject-credits">{subject.credits} {subject.credits === 1 ? 'crédito' : 'créditos'}</div>
         </div>
     );
 }

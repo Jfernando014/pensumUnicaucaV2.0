@@ -1,132 +1,105 @@
 .subject-card {
   position: relative;
-  border-radius: 12px;
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 1.2rem 1rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.4rem;
 }
 
-.subject-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 6px;
-  background-color: var(--card-color);
-  transition: width 0.3s ease;
-}
-
-.subject-card:hover:not(.status-blocked) {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.subject-card:hover:not(.status-blocked)::before {
-  width: 100%;
-  opacity: 0.15;
-}
-
-/* Status variants */
-.status-approved {
-  border: 2px solid var(--status-approved);
-  background: rgba(34, 197, 94, 0.05);
-}
-
-.status-approved::before {
-  background-color: var(--status-approved);
-}
-
-.status-approved .subject-name {
-  color: var(--status-approved);
-}
-
-.status-blocked {
-  cursor: not-allowed;
-  opacity: 0.6;
-  filter: grayscale(80%);
-  border: 1px dashed rgba(239, 68, 68, 0.3);
-}
-
-.status-blocked:hover {
-  border-color: var(--status-blocked);
-}
-
-/* Relation Highlighting (Prereq/Coreq) */
-.highlight-prereq {
-  box-shadow: 0 0 0 2px var(--status-prereq), 0 0 20px rgba(59, 130, 246, 0.4);
-  transform: scale(1.02);
-  z-index: 5;
-}
-
-.highlight-unlockedBy {
-  box-shadow: 0 0 0 2px var(--status-approved), 0 0 20px rgba(34, 197, 94, 0.4);
-  transform: scale(1.02);
-  z-index: 5;
-}
-
-.highlight-coreq {
-  box-shadow: 0 0 0 2px var(--status-coreq), 0 0 20px rgba(217, 70, 239, 0.4);
-  transform: scale(1.02);
-  z-index: 5;
-}
-
-/* Typography */
-.subject-name {
-  font-weight: 700;
-  font-size: 0.95rem;
-  line-height: 1.2;
-  color: var(--text-primary);
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 0.2rem;
-  transition: color 0.3s ease;
 }
 
 .subject-code {
-  font-size: 0.75rem;
-  font-family: monospace;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  background: rgba(0, 0, 0, 0.2);
-  padding: 0.1rem 0.3rem;
+}
+
+.badge {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  width: fit-content;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge-available {
+  background-color: var(--status-available-bg);
+  color: var(--status-available-text);
+}
+
+.badge-locked {
+  color: var(--status-locked-text);
+  font-size: 0.8rem; /* For lock icon */
+}
+
+.badge-locked-reason {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--status-locked-text);
+}
+
+.badge-encurso {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: var(--glow-blue);
+}
+
+.subject-name {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--text-primary);
 }
 
 .subject-credits {
   font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Status variants */
+.status-approved {
+  background-color: var(--status-approved-bg);
+  border-color: var(--status-approved-bg);
+}
+
+.status-approved .subject-code,
+.status-approved .subject-credits {
+  color: var(--status-approved-text);
+  opacity: 0.8;
+}
+
+.status-approved .subject-name {
+  color: var(--status-approved-text);
+}
+
+.status-blocked {
+  cursor: not-allowed;
+}
+
+.status-blocked .subject-name {
   color: var(--text-secondary);
-  font-weight: 500;
 }
 
-.subject-badge {
-  font-size: 0.7rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 0.5rem;
-  width: fit-content;
+/* Highlight (Hover/Relaciones) */
+.highlight-focus {
+  border-color: var(--glow-blue);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4), inset 0 0 10px rgba(59, 130, 246, 0.1);
+  z-index: 5;
 }
 
-.badge-available {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+.highlight-related {
+  border-color: var(--glow-orange);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), inset 0 0 10px rgba(245, 158, 11, 0.1);
+  z-index: 5;
 }
 
-.badge-blocked {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  margin-top: 0.2rem;
-  font-size: 0.65rem;
-  text-transform: none;
-}
