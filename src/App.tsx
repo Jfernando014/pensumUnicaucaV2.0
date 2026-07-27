@@ -287,7 +287,8 @@ function App() {
           <img src="/logo.png" alt="Logo Unicauca" className="app-logo" />
           <h1 className="app-title">Pensum Unicauca</h1>
         </div>
-        <div className="mode-toggle">
+        {/* Dos botones para desktop */}
+        <div className="mode-toggle desktop-only">
           <button
             className={`mode-btn ${interactionMode === 'approve' ? 'active' : ''}`}
             onClick={() => setInteractionMode('approve')}
@@ -301,6 +302,13 @@ function App() {
             Cursando
           </button>
         </div>
+        {/* Botón único toggle para móvil */}
+        <button
+          className={`mode-btn-single mobile-only ${interactionMode === 'approve' ? 'approve' : 'in-progress'}`}
+          onClick={() => setInteractionMode(interactionMode === 'approve' ? 'inProgress' : 'approve')}
+        >
+          {interactionMode === 'approve' ? 'Aprobando' : 'Cursando'}
+        </button>
         <select className="program-selector">
           <option value="sistemas">Ingeniería de Sistemas</option>
           {/* Futuros programas se agregarán aquí */}
