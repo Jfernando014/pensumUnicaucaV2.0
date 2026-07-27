@@ -3,31 +3,51 @@
 :root {
   /* Typography */
   --font-family: 'Outfit', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  
+
   /* Colors - Dashboard Theme */
-  --bg-color: #0b1120; /* Very dark blue/black */
-  --card-bg: #1e2433; /* Dark gray/blue for panels and cards */
+  --bg-color: #0b1120;
+  /* Very dark blue/black */
+  --card-bg: #1e2433;
+  /* Dark gray/blue for panels and cards */
   --card-border: #2e364a;
-  
+
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  
+
   /* Status Colors (Neon) */
   --status-available-text: #22c55e;
   --status-available-bg: rgba(34, 197, 94, 0.15);
-  --status-approved-bg: #10b981; /* Solid green for approved */
+  --status-approved-bg: #10b981;
+  /* Solid green for approved */
   --status-approved-text: #064e3b;
   --status-locked-text: #94a3b8;
-  
-  --glow-blue: #3b82f6; /* En curso / hover */
-  --glow-orange: #f59e0b; /* Relacionadas */
+
+  --glow-blue: #3b82f6;
+  /* En curso / hover */
+  --glow-orange: #f59e0b;
+  /* Relacionadas */
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* Agrupa el logo y el título en la misma línea */
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Espacio entre el logo y el texto */
+}
+
+/* Controla el tamaño de la imagen */
+.app-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 body {
@@ -71,7 +91,12 @@ a {
   transition: color 0.3s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   line-height: 1.2;
 }
@@ -79,4 +104,3 @@ h1, h2, h3, h4, h5, h6 {
 button {
   font-family: var(--font-family);
 }
-

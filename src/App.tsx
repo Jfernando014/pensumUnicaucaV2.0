@@ -51,7 +51,7 @@ function App() {
         // Si apruebo, quitar de en curso automáticamente
         if (next[code]) {
           setInProgressSubjects(p => {
-            const np = {...p};
+            const np = { ...p };
             delete np[code];
             return np;
           });
@@ -70,65 +70,65 @@ function App() {
   // Logica para cumplir requisitos
   // Prerequisitos
   function hasPrerequisites(subjectCode: string): boolean {
-  const req = subjectRequirements[subjectCode];
-  if (!req?.prerequisites) return true;
+    const req = subjectRequirements[subjectCode];
+    if (!req?.prerequisites) return true;
 
-  return req.prerequisites.every(
-    (code) => approvedSubjects[code]
-  );
+    return req.prerequisites.every(
+      (code) => approvedSubjects[code]
+    );
   }
 
   // Corequisitos
   function hasCorequisites(subjectCode: string): boolean {
-  const req = subjectRequirements[subjectCode];
-  if (!req?.corequisites) return true;
+    const req = subjectRequirements[subjectCode];
+    if (!req?.corequisites) return true;
 
-  return req.corequisites.every(
-    (code) => approvedSubjects[code] || approvedSubjects[subjectCode]
-  );
+    return req.corequisites.every(
+      (code) => approvedSubjects[code] || approvedSubjects[subjectCode]
+    );
   }
 
   // Regla 3 semestres :(
   function violatesSemesterGap(subjectSemester: number): boolean {
-  return pensum.some((s) => {
-    if (
-      approvedSubjects[s.code] ||
-      globalRules.semesterGapExceptionsCategories.includes(s.category)
-    ) {
-      return false;
-    }
+    return pensum.some((s) => {
+      if (
+        approvedSubjects[s.code] ||
+        globalRules.semesterGapExceptionsCategories.includes(s.category)
+      ) {
+        return false;
+      }
 
-    return subjectSemester - s.semester >= globalRules.semesterGapLimit;
-  });
+      return subjectSemester - s.semester >= globalRules.semesterGapLimit;
+    });
   }
 
   // Electivas >= 7°
   function violatesElectiveRule(subject: Subject): boolean {
-  if (subject.category !== "electiva") return false;
-  if (subject.semester < globalRules.electives.minSemester) return true;
+    if (subject.category !== "electiva") return false;
+    if (subject.semester < globalRules.electives.minSemester) return true;
 
-  return pensum.some(
-    (s) =>
-      s.semester < globalRules.electives.minSemester &&
-      !approvedSubjects[s.code]
-  );
+    return pensum.some(
+      (s) =>
+        s.semester < globalRules.electives.minSemester &&
+        !approvedSubjects[s.code]
+    );
   }
 
   // Funcion central, está habilitada ¿?
   function isEnabled(subject: Subject): { enabled: boolean; reason?: string } {
-  if (!hasPrerequisites(subject.code)) {
-    return { enabled: false, reason: "No cumple prerrequisitos" };
-  }
+    if (!hasPrerequisites(subject.code)) {
+      return { enabled: false, reason: "No cumple prerrequisitos" };
+    }
 
-  if (violatesSemesterGap(subject.semester)) {
-    return { enabled: false, reason: "Regla de los 3 semestres" };
-  }
+    if (violatesSemesterGap(subject.semester)) {
+      return { enabled: false, reason: "Regla de los 3 semestres" };
+    }
 
-  if (violatesElectiveRule(subject)) {
-    return { enabled: false, reason: "Regla especial de electivas" };
-  }
+    if (violatesElectiveRule(subject)) {
+      return { enabled: false, reason: "Regla especial de electivas" };
+    }
 
-  return { enabled: true };
+    return { enabled: true };
   }
 
   // Funcion calculo creditos
@@ -159,7 +159,7 @@ function App() {
 
         const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-        const interval: any = setInterval(function() {
+        const interval: any = setInterval(function () {
           const timeLeft = animationEnd - Date.now();
 
           if (timeLeft <= 0) {
@@ -239,7 +239,7 @@ function App() {
             updated[s.code] = true;
             // Quitamos de en curso si existía
             setInProgressSubjects(p => {
-              const np = {...p};
+              const np = { ...p };
               delete np[s.code];
               return np;
             });
@@ -283,15 +283,18 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1 className="app-title">Pensum Unicauca</h1>
+        <div className="brand-container">
+          <img src="/logo.png" alt="Logo Unicauca" className="app-logo" />
+          <h1 className="app-title">Pensum Unicauca</h1>
+        </div>
         <div className="mode-toggle">
-          <button 
+          <button
             className={`mode-btn ${interactionMode === 'approve' ? 'active' : ''}`}
             onClick={() => setInteractionMode('approve')}
           >
             Aprobando
           </button>
-          <button 
+          <button
             className={`mode-btn ${interactionMode === 'inProgress' ? 'active' : ''}`}
             onClick={() => setInteractionMode('inProgress')}
           >
@@ -313,13 +316,13 @@ function App() {
               <div key={semester} className="semester-col">
                 <div className="semester-header">
                   <h2 className="semester-title">Semestre {semester}</h2>
-                  <div 
+                  <div
                     className={`semester-toggle ${semesters[semester].every(s => approvedSubjects[s.code]) ? 'active' : ''}`}
                     onClick={() => toggleSemester(semester)}
                     title="Marcar todo el semestre"
                   />
                 </div>
-                
+
                 <div className="subjects-list">
                   {semesters[semester].map((subject) => {
                     const status = isEnabled(subject);
@@ -386,7 +389,7 @@ function App() {
         </button>
       </footer>
     </div>
-  );  
+  );
 }
 
 export default App;
