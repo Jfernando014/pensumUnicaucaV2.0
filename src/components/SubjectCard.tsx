@@ -14,7 +14,7 @@ type Props = {
   isCoreq: boolean;
 };
 
-function SubjectCard({ subject, approved, enabled, reason, onToggle, setHoveredSubject,
+function SubjectCard({ subject, approved, enabled, reason, onToggle, hoveredSubject, setHoveredSubject,
                         isPrereq, isUnlockedBy, isCoreq }: Props) {
     const isBlocked = !enabled && !approved;
     const isHovered = hoveredSubject === subject.code;

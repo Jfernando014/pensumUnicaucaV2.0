@@ -3,6 +3,7 @@ import type { Subject } from "./data/pensum";
 import SubjectCard from "./components/SubjectCard";
 import { useEffect, useState } from "react";
 import { subjectRequirements, globalRules } from "./data/requisitos";
+import "./App.css";
 
 function App() {
   // Agrupar materias por semestre
