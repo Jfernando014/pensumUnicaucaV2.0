@@ -185,125 +185,90 @@ function App() {
   const [hoveredSubject, setHoveredSubject] = useState<string | null>(null);
 
   return (
-  <div style={{ padding: "16px" }}>
-    <h1>Pensum Ingeniería de Sistemas</h1>
+    <div className="app-container">
+      <header className="app-header">
+        <h1 className="app-title">Pensum Unicauca</h1>
+        <select className="program-selector">
+          <option value="sistemas">Ingeniería de Sistemas</option>
+          {/* Futuros programas se agregarán aquí */}
+        </select>
+      </header>
 
-    <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: `repeat(${Object.keys(semesters).length}, 162px)`,
-      gap: "16px",
-      marginTop: "16px",
-      overflowX: "auto",
-    }}
-    >
-      {Object.keys(semesters)
-        .map(Number)
-        .sort((a, b) => a - b)
-        .map((semester) => (
-          <div key={semester}>
+      <main className="main-content">
+        <div className="semesters-container">
+          {Object.keys(semesters)
+            .map(Number)
+            .sort((a, b) => a - b)
+            .map((semester) => (
+              <div key={semester} className="semester-col">
+                <h2
+                  className="semester-title"
+                  onClick={() => toggleSemester(semester)}
+                  title="Clic para seleccionar/deseleccionar todo el semestre"
+                >
+                  Semestre {semester}
+                  <span style={{ fontSize: "0.8em", opacity: 0.5 }}>✓</span>
+                </h2>
+                
+                <div className="subjects-list">
+                  {semesters[semester].map((subject) => {
+                    const status = isEnabled(subject);
 
-            <h2
-              style={{ cursor: "pointer" }}
-              onClick={() => toggleSemester(semester)}
-            >
-              Semestre {semester}
-            </h2>
-            
-            {semesters[semester].map((subject) => {
-              const status = isEnabled(subject);
+                    const isPrereq =
+                      hoveredSubject !== null &&
+                      subjectRequirements[hoveredSubject]?.prerequisites?.includes(subject.code);
 
-              const isPrereq =
-                hoveredSubject !== null &&
-                subjectRequirements[hoveredSubject]?.prerequisites?.includes(subject.code);
+                    const isUnlockedBy =
+                      hoveredSubject !== null &&
+                      subjectRequirements[subject.code]?.prerequisites?.includes(hoveredSubject);
 
-              const isUnlockedBy =
-                hoveredSubject !== null &&
-                subjectRequirements[subject.code]?.prerequisites?.includes(hoveredSubject);
+                    const isCoreq =
+                      hoveredSubject !== null &&
+                      (
+                        subjectRequirements[hoveredSubject]?.corequisites?.includes(subject.code) ||
+                        subjectRequirements[subject.code]?.corequisites?.includes(hoveredSubject)
+                      );
 
-              const isCoreq =
-                hoveredSubject !== null &&
-                (
-                  subjectRequirements[hoveredSubject]?.corequisites?.includes(subject.code) ||
-                  subjectRequirements[subject.code]?.corequisites?.includes(hoveredSubject)
-                );
+                    return (
+                      <SubjectCard
+                        key={subject.code}
+                        subject={subject}
+                        approved={!!approvedSubjects[subject.code]}
+                        onToggle={toggleApproved}
+                        enabled={status.enabled}
+                        reason={status.reason}
+                        hoveredSubject={hoveredSubject}
+                        setHoveredSubject={setHoveredSubject}
+                        isPrereq={!!isPrereq}
+                        isUnlockedBy={!!isUnlockedBy}
+                        isCoreq={!!isCoreq}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+        </div>
+      </main>
 
-
-              return (
-                <SubjectCard
-                key={subject.code}
-                subject={subject}
-                approved={!!approvedSubjects[subject.code]}
-                onToggle={toggleApproved}
-                enabled={status.enabled}
-                reason={status.reason}
-                hoveredSubject={hoveredSubject}
-                setHoveredSubject={setHoveredSubject}
-                isPrereq={!!isPrereq}
-                isUnlockedBy={!!isUnlockedBy}
-                isCoreq={!!isCoreq}
-                />
-              );
-            })}
+      <footer className="app-footer">
+        <div className="progress-container">
+          <div className="progress-stats">
+            <span>Progreso del pensum</span>
+            <span><strong>{approvedCredits}</strong> / {totalCredits} créditos ({progressPercent}%)</span>
           </div>
-        ))}
+          <div className="progress-bar-bg">
+            <div
+              className="progress-bar-fill"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+        <button className="reset-btn" onClick={resetAll}>
+          Reiniciar progreso
+        </button>
+      </footer>
     </div>
-
-    <div
-      style={{
-        marginTop: "12px",
-        padding: "12px",
-        borderRadius: "8px",
-        background: "rgba(78, 78, 78, 1)",
-        maxWidth: "500px",
-      }}
-    >
-      <div style={{ fontWeight: 600 }}>
-        Progreso del pensum
-      </div>
-
-      <div style={{ marginTop: "6px" }}>
-        {approvedCredits} / {totalCredits} créditos
-      </div>
-
-      <div style={{ marginTop: "6px" }}>
-        Avance: {progressPercent}%
-      </div>
-    </div>
-
-    <div
-      style={{
-        marginTop: "8px",
-        height: "12px",
-        background: "rgba(255, 255, 255, 1)",
-        borderRadius: "6px",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          width: `${progressPercent}%`,
-          background: "rgba(46, 125, 50, 1)",
-          transition: "width 0.3s ease",
-        }}
-      />
-    </div>
-
-    <button
-      onClick={resetAll}
-      style={{
-        marginTop: "12px",
-        padding: "6px 12px",
-        borderRadius: "6px",
-        border: "1px solid #999",
-        cursor: "pointer",
-      }}
-    >
-      Reiniciar progreso
-    </button>
-
-  </div>
   );  
 }
 
