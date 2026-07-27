@@ -302,14 +302,21 @@ function App() {
             Cursando
           </button>
         </div>
-        {/* Botón único toggle para móvil */}
-        <button
-          className={`mode-btn-single mobile-only ${interactionMode === 'approve' ? 'approve' : 'in-progress'}`}
-          onClick={() => setInteractionMode(interactionMode === 'approve' ? 'inProgress' : 'approve')}
-        >
-          {interactionMode === 'approve' ? 'Aprobando' : 'Cursando'}
-        </button>
-        <select className="program-selector">
+        {/* Botón único toggle para móvil + selector, en la misma fila */}
+        <div className="mobile-controls mobile-only">
+          <button
+            className={`mode-btn-single ${interactionMode === 'approve' ? 'approve' : 'in-progress'}`}
+            onClick={() => setInteractionMode(interactionMode === 'approve' ? 'inProgress' : 'approve')}
+          >
+            {interactionMode === 'approve' ? 'Aprobando' : 'Cursando'}
+          </button>
+          <select className="program-selector">
+            <option value="sistemas">Ingeniería de Sistemas</option>
+            {/* Futuros programas se agregarán aquí */}
+          </select>
+        </div>
+        {/* Selector solo visible en desktop */}
+        <select className="program-selector desktop-only">
           <option value="sistemas">Ingeniería de Sistemas</option>
           {/* Futuros programas se agregarán aquí */}
         </select>
