@@ -1,7 +1,7 @@
 import { pensum } from "./data/pensum";
 import type { Subject } from "./data/pensum";
 import SubjectCard from "./components/SubjectCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { subjectRequirements, globalRules } from "./data/requisitos";
 import "./App.css";
 
@@ -185,6 +185,26 @@ function App() {
   // Hover
   const [hoveredSubject, setHoveredSubject] = useState<string | null>(null);
 
+  // Scroll horizontal
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Si el desplazamiento es puramente vertical, lo convertimos a horizontal
+      // Esto permite que el mouse wheel normal desplace los semestres de lado a lado
+      if (e.deltaY !== 0 && e.deltaX === 0) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, []);
+
   return (
     <div className="app-container">
       <header className="app-header">
@@ -196,7 +216,7 @@ function App() {
       </header>
 
       <main className="main-content">
-        <div className="semesters-container">
+        <div className="semesters-container" ref={scrollRef}>
           {Object.keys(semesters)
             .map(Number)
             .sort((a, b) => a - b)
@@ -257,11 +277,14 @@ function App() {
           <div className="progress-stats">
             Créditos Obtenidos: <strong>{approvedCredits}</strong> / {totalCredits}
           </div>
-          <div className="progress-bar-bg">
-            <div
-              className="progress-bar-fill"
-              style={{ width: `${progressPercent}%` }}
-            />
+          <div className="progress-bar-wrapper">
+            <div className="progress-bar-bg">
+              <div
+                className="progress-bar-fill"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+            <span className="progress-percent-text">{progressPercent}%</span>
           </div>
         </div>
         <button className="reset-btn" onClick={resetAll}>

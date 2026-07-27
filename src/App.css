@@ -156,7 +156,14 @@
   font-weight: 600;
 }
 
+.progress-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .progress-bar-bg {
+  flex: 1;
   height: 6px;
   background: var(--card-bg);
   border-radius: 3px;
@@ -171,6 +178,14 @@
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
 }
 
+.progress-percent-text {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  min-width: 40px;
+  text-align: right;
+}
+
 .reset-btn {
   margin-left: auto;
   background: transparent;
@@ -183,5 +198,55 @@
 
 .reset-btn:hover {
   color: var(--text-primary);
+}
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+  .app-container {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .semesters-container {
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    padding-bottom: 120px;
+    gap: 1.5rem;
+    height: auto;
+    overflow-y: visible;
+  }
+  
+  .semester-col {
+    flex: none;
+    width: 100%;
+    height: auto;
+  }
+  
+  .subjects-list {
+    overflow-y: visible;
+  }
+
+  .app-footer {
+    position: fixed; /* Mantiene el footer abajo aunque el contenedor principal haga scroll */
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .progress-container {
+    width: 100%;
+  }
+  
+  .reset-btn {
+    margin-left: 0;
+  }
 }
 
