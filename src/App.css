@@ -330,7 +330,7 @@
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981, #3b82f6);
+  background: linear-gradient(90deg, #3b82f6, #043686);
   border-radius: 3px;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
@@ -389,7 +389,8 @@
   .semesters-container {
     flex-direction: column;
     padding: 1rem 1.5rem;
-    padding-top: 130px; /* Compensa el header fixed */
+    padding-top: 130px;
+    /* Compensa el header fixed */
     padding-bottom: 120px;
     gap: 1.5rem;
     height: auto;
