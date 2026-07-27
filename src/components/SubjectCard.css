@@ -82,6 +82,12 @@
   color: var(--status-approved-text);
 }
 
+.status-in-progress {
+  border-color: var(--glow-blue);
+  background-color: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
 .status-blocked {
   cursor: not-allowed;
 }

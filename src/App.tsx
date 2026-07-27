@@ -16,27 +16,55 @@ function App() {
     semesters[subject.semester].push(subject);
   });
 
+  // Modos de interaccion
+  const [interactionMode, setInteractionMode] = useState<"approve" | "inProgress">("approve");
+
   // Carga proceso desde localStorage
   const [approvedSubjects, setApprovedSubjects] = useState<Record<string, boolean>>({});
+  const [inProgressSubjects, setInProgressSubjects] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-  const stored = localStorage.getItem("approvedSubjects");
-  if (stored) {
-    setApprovedSubjects(JSON.parse(stored));
-  }
+    const storedApp = localStorage.getItem("approvedSubjects");
+    if (storedApp) {
+      setApprovedSubjects(JSON.parse(storedApp));
+    }
+    const storedInProg = localStorage.getItem("inProgressSubjects");
+    if (storedInProg) {
+      setInProgressSubjects(JSON.parse(storedInProg));
+    }
   }, []);
 
   // Guardar progeso automaticamente
   useEffect(() => {
-  localStorage.setItem("approvedSubjects", JSON.stringify(approvedSubjects));
+    localStorage.setItem("approvedSubjects", JSON.stringify(approvedSubjects));
   }, [approvedSubjects]);
+
+  useEffect(() => {
+    localStorage.setItem("inProgressSubjects", JSON.stringify(inProgressSubjects));
+  }, [inProgressSubjects]);
 
   // Funcion para alternar estado
   function toggleApproved(code: string) {
-  setApprovedSubjects((prev) => ({
-    ...prev,
-    [code]: !prev[code],
-  }));
+    if (interactionMode === "approve") {
+      setApprovedSubjects((prev) => {
+        const next = { ...prev, [code]: !prev[code] };
+        // Si apruebo, quitar de en curso automáticamente
+        if (next[code]) {
+          setInProgressSubjects(p => {
+            const np = {...p};
+            delete np[code];
+            return np;
+          });
+        }
+        return next;
+      });
+    } else {
+      setInProgressSubjects((prev) => {
+        // No permitir poner en curso si ya está aprobada
+        if (approvedSubjects[code]) return prev;
+        return { ...prev, [code]: !prev[code] };
+      });
+    }
   }
 
   // Logica para cumplir requisitos
@@ -209,6 +237,12 @@ function App() {
         } else {
           if (isEnabled(s).enabled) {
             updated[s.code] = true;
+            // Quitamos de en curso si existía
+            setInProgressSubjects(p => {
+              const np = {...p};
+              delete np[s.code];
+              return np;
+            });
           }
         }
       });
@@ -220,6 +254,7 @@ function App() {
   // DESMARCAR TODO
   function resetAll() {
     setApprovedSubjects({});
+    setInProgressSubjects({});
   }
 
   // Hover
@@ -249,6 +284,20 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <h1 className="app-title">Pensum Unicauca</h1>
+        <div className="mode-toggle">
+          <button 
+            className={`mode-btn ${interactionMode === 'approve' ? 'active' : ''}`}
+            onClick={() => setInteractionMode('approve')}
+          >
+            Aprobando
+          </button>
+          <button 
+            className={`mode-btn ${interactionMode === 'inProgress' ? 'active' : ''}`}
+            onClick={() => setInteractionMode('inProgress')}
+          >
+            Cursando
+          </button>
+        </div>
         <select className="program-selector">
           <option value="sistemas">Ingeniería de Sistemas</option>
           {/* Futuros programas se agregarán aquí */}
@@ -295,6 +344,7 @@ function App() {
                         key={subject.code}
                         subject={subject}
                         approved={!!approvedSubjects[subject.code]}
+                        inProgress={!!inProgressSubjects[subject.code]}
                         onToggle={toggleApproved}
                         enabled={status.enabled}
                         reason={status.reason}

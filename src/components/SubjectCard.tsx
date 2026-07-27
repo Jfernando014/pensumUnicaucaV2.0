@@ -4,6 +4,7 @@ import "./SubjectCard.css";
 type Props = {
   subject: Subject;
   approved: boolean;
+  inProgress: boolean;
   enabled: boolean;
   reason?: string;
   onToggle: (code: string) => void;
@@ -14,7 +15,7 @@ type Props = {
   isCoreq: boolean;
 };
 
-function SubjectCard({ subject, approved, enabled, reason, onToggle, hoveredSubject, setHoveredSubject,
+function SubjectCard({ subject, approved, inProgress, enabled, reason, onToggle, hoveredSubject, setHoveredSubject,
                         isPrereq, isUnlockedBy, isCoreq }: Props) {
     const isBlocked = !enabled && !approved;
     const isHovered = hoveredSubject === subject.code;
@@ -22,6 +23,8 @@ function SubjectCard({ subject, approved, enabled, reason, onToggle, hoveredSubj
     // Determinar las clases a aplicar
     const classNames = ["subject-card"];
     if (approved) classNames.push("status-approved");
+    else if (inProgress) classNames.push("status-in-progress");
+
     if (isBlocked) classNames.push("status-blocked");
     
     if (isHovered) {
@@ -39,10 +42,10 @@ function SubjectCard({ subject, approved, enabled, reason, onToggle, hoveredSubj
         >
             <div className="card-header">
                 <span className="subject-code">{subject.code}</span>
-                {!approved && enabled && !isHovered && (
+                {!approved && !inProgress && enabled && (
                     <span className="badge badge-available">DISPONIBLE</span>
                 )}
-                {!approved && enabled && isHovered && (
+                {!approved && inProgress && (
                     <span className="badge badge-encurso">EN CURSO</span>
                 )}
                 {isBlocked && (
