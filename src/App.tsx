@@ -121,6 +121,46 @@ function App() {
       ? 0
       : Math.round((approvedCredits / totalCredits) * 100);
 
+  // Efecto Confeti al llegar al 100%
+  useEffect(() => {
+    if (progressPercent === 100) {
+      const fireConfetti = () => {
+        const duration = 4 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+        const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+        const interval: any = setInterval(function() {
+          const timeLeft = animationEnd - Date.now();
+
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+
+          const particleCount = 50 * (timeLeft / duration);
+          (window as any).confetti({
+            ...defaults, particleCount,
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+          });
+          (window as any).confetti({
+            ...defaults, particleCount,
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+          });
+        }, 250);
+      };
+
+      if ((window as any).confetti) {
+        fireConfetti();
+      } else {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js";
+        script.onload = fireConfetti;
+        document.body.appendChild(script);
+      }
+    }
+  }, [progressPercent]);
+
   // Funcion que valida si una materia puede estar aprobada
   function canRemainApproved(subject: Subject): boolean {
     return (
@@ -275,7 +315,11 @@ function App() {
       <footer className="app-footer">
         <div className="progress-container">
           <div className="progress-stats">
-            Créditos Obtenidos: <strong>{approvedCredits}</strong> / {totalCredits}
+            {progressPercent === 100 ? (
+              <span className="celebration-text">🎉 ¡Has completado el pensum! 🎓🏆</span>
+            ) : (
+              <>Créditos Obtenidos: <strong>{approvedCredits}</strong> / {totalCredits}</>
+            )}
           </div>
           <div className="progress-bar-wrapper">
             <div className="progress-bar-bg">
