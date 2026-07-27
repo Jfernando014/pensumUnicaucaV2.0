@@ -361,20 +361,35 @@
 /* Responsividad para móviles */
 @media (max-width: 768px) {
   .app-container {
-    height: 100%;
-    overflow-y: auto;
+    height: auto;
+    overflow: visible;
   }
 
+
   .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--bg-color);
     flex-direction: column;
     align-items: flex-start;
-    padding: 1.5rem;
-    gap: 1rem;
+    padding: 1rem 1.25rem;
+    gap: 0.75rem;
+    transition: transform 0.3s ease;
+    /* Borde inferior sutil para separar del contenido */
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .app-header.header-hidden {
+    transform: translateY(-110%);
   }
 
   .semesters-container {
     flex-direction: column;
     padding: 1rem 1.5rem;
+    padding-top: 130px; /* Compensa el header fixed */
     padding-bottom: 120px;
     gap: 1.5rem;
     height: auto;

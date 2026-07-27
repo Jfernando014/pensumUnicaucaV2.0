@@ -260,7 +260,7 @@ function App() {
   // Hover
   const [hoveredSubject, setHoveredSubject] = useState<string | null>(null);
 
-  // Scroll horizontal
+  // Scroll horizontal (desktop)
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -280,9 +280,34 @@ function App() {
     return () => el.removeEventListener("wheel", handleWheel);
   }, []);
 
+  // Header ocultar/mostrar al hacer scroll (móvil)
+  const headerRef = useRef<HTMLElement>(null);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const header = headerRef.current;
+      if (!header) return;
+
+      if (currentY > lastScrollY.current && currentY > 80) {
+        // Bajando y ya pasó el umbral → ocultar
+        header.classList.add('header-hidden');
+      } else if (currentY < lastScrollY.current) {
+        // Subiendo → mostrar
+        header.classList.remove('header-hidden');
+      }
+      lastScrollY.current = currentY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+
   return (
     <div className="app-container">
-      <header className="app-header">
+      <header className="app-header" ref={headerRef}>
         <div className="brand-container">
           <img src="/logo.png" alt="Logo Unicauca" className="app-logo" />
           <h1 className="app-title">Pensum Unicauca</h1>
